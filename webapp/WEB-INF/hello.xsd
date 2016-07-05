@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.ispring.com/ws/hello/schemas" 
+	elementFormDefault="qualified" 
+	xmlns="http://www.w3.org/2001/XMLSchema"   
+	xmlns:tns="http://www.ispring.com/ws/hello/schemas">
+	<!-- schema等元素定义 -->
+	<!--elementFormDefault指出任何 XML实例文档所使用的且在此 schema中声明过的元素必须被命名空间限定 -->
+	<!-- xmlns:tns作为命名空间引用 -->
+	<!-- xmlns:xsd  <xsd:schema 普通类型  type="xsd:string"/> -->
+	<!-- string  decimal  integer  boolean  date   time 基本类型-->
+    <!-- 对象类型封装 -->
+	<complexType name="Header">
+		<sequence>
+			<!-- element中  default缺省值  fixed固定值 -->
+			<element name="invoker" type="string" fixed="admin"  maxOccurs="1" minOccurs="1"></element>
+			<element name="secretKey" type="string" default="yy" maxOccurs="1" minOccurs="1"></element>
+		</sequence>
+	</complexType>
+	<complexType name="ReturnFlag">
+		<sequence>
+			<element name="code" type="string" maxOccurs="1" minOccurs="1"></element>
+			<element name="desc" type="string" maxOccurs="1" minOccurs="1"></element>
+		</sequence>
+	</complexType>
+	<!-- 封装发布的请求接口参数     type="tns:Header"对指定命名空间下的类型引用    Occurrence指示器用于定义某个元素出现的频率 unbounded（无限次）-->
+	<element name="sayHelloRequest">
+        <complexType>
+            <sequence>
+            	<element name="header" type="tns:Header"/>
+                <element name="name" type="string" maxOccurs="1" minOccurs="1"/>
+            </sequence>
+        </complexType>
+    </element>
+</schema>
+	
+   <!--  <element name="sayHelloResponse">
+        <complexType>
+            <sequence>
+                <element maxOccurs="1" minOccurs="1" name="return" type="string"/>
+            </sequence>
+        </complexType>
+    </element> -->
+    <!-- restriction用于为 XML元素或者属性定义可接受的值    限制元素大小  可选值等   currency:只能下面的三种  限制
+	<simpleType name="currency">
+        <restriction base="xs:string">
+            <enumeration value="GBP"/>
+            <enumeration value="EUR"/>
+            <enumeration value="PLN"/>
+        </restriction>
+    </simpleType> -->

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/aop 
+	   http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+    <!-- 其中最主要的bean就是payloadMapping, 它定义了接收到的message与endpoint之间的mapping关系:
+    将SOAP Body中包含的xml的根节点的QName为{http://www.fuxueliang.com/ws/hello}HelloRequest交给
+  helloEndpoint处理. -->
+  
+    <bean id="payloadMapping" 
+    class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
+        <property name="endpointMap">
+            <map>
+                <entry key="{http://www.ispring.com/ws/hello/schemas}sayHelloRequest"> 
+                    <ref bean="helloEndpoint"/>         
+                </entry>
+            </map>      
+        </property> 
+    </bean>
+     <!-- SimpleWsdl11Definition这个bean则是定义了这个服务的wsdl -->
+    <!-- <bean id="hello" class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition"> 
+        <property name="wsdl" value="/WEB-INF/hello.wsdl"></property>
+    </bean> -->
+    
+    <!-- ================================================================================= -->
+    <bean id="helloSpringWs" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
+        <property name="schema" ref="schemas"/>
+        <property name="portTypeName" value="sayHelloService"/> <!-- EndPoint端点服务名称 -->
+        <property name="locationUri" value="http://localhost:8080/spring-ws-server/service/helloSpringWs"/>
+        <property name="targetNamespace" value="http://www.ispring.com/ws/hello/definitions"/>
+    </bean>
+    
+    <bean id="schemas" class="org.springframework.xml.xsd.SimpleXsdSchema">
+        <property name="xsd" value="/WEB-INF/hello.xsd"/>
+    </bean>
+    <!-- ================================================================================= -->
+    
+    
+    <bean id="helloEndpoint" class="com.sws.HelloEndPointJDom">
+        <property name="helloService" ref="helloService"></property>
+    </bean>
+    
+    <bean id="helloService" class="com.sws.HelloServiceImpl"></bean>
+    
+    <bean id="mySecurityManager" class="com.sws.MySecurityManager"/>
+    <aop:config>  
+         <aop:aspect id="securityBefore" ref="mySecurityManager">  
+            <aop:around pointcut="execution(* invoke*(..))"  method="around"/>  
+        </aop:aspect>  
+    </aop:config>
+    
+</beans>

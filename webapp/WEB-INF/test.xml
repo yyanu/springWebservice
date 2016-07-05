@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<sch:sayHelloRequest xmlns:sch="http://www.ispring.com/ws/hello/schemas">
+   <sch:name>yanyu</sch:name>
+</sch:sayHelloRequest>
